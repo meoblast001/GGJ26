@@ -10,39 +10,9 @@ namespace Network
         public event Action OnConnected;
         public event Action<NetMessage> OnMessageReceived;
 
-        readonly int udpPort;
-        readonly string broadcastName;
-
         TcpClient client;
         NetworkStream stream;
-
-        public NetworkClient(int udpPort, string broadcastName)
-        {
-            this.udpPort = udpPort;
-            this.broadcastName = broadcastName;
-        }
-
-        public async Task DiscoverAndConnect()
-        {
-            using var udp = new UdpClient(udpPort);
-
-            Debug.Log("Discovering server...");
-            while (true)
-            {
-                var result = await udp.ReceiveAsync();
-                string msg = Encoding.UTF8.GetString(result.Buffer);
-
-                if (!msg.StartsWith(broadcastName))
-                    continue;
-
-                string[] parts = msg.Split('|');
-                int tcpPort = int.Parse(parts[1]);
-                string ip = result.RemoteEndPoint.Address.ToString();
-
-                await Connect(ip, tcpPort);
-                break;
-            }
-        }
+        
 
         public async Task Connect(string ip, int port)
         {

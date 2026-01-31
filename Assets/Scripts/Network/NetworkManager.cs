@@ -12,7 +12,6 @@ namespace Network
 
         public bool isServer;
         public int tcpPort = 5000;
-        public int udpPort = 47777;
 
         NetworkServer server;
         NetworkClient client;
@@ -48,7 +47,7 @@ namespace Network
 
         async void StartServer()
         {
-            server = new NetworkServer(tcpPort, udpPort, "GGJ2026_UDP_BROADCAST");
+            server = new NetworkServer(tcpPort, "GGJ2026_UDP_BROADCAST");
 
             server.OnMessageReceived += HandleMessage;
             server.OnClientConnected += _ => Debug.Log("Client connected");
@@ -56,14 +55,12 @@ namespace Network
             await server.Start();
         }
 
-        async void StartClient()
+        void StartClient()
         {
-            client = new NetworkClient(udpPort, "GGJ2026_UDP_BROADCAST");
+            client = new NetworkClient();
 
             client.OnConnected += () => Debug.Log("Connected to server");
             client.OnMessageReceived += HandleMessage;
-
-            await client.DiscoverAndConnect();
         }
 
         void HandleMessage(NetMessage message)

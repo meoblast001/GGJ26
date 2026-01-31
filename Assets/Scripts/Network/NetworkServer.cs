@@ -13,16 +13,14 @@ namespace Network
         public event Action<NetMessage> OnMessageReceived;
 
         readonly int tcpPort;
-        readonly int udpPort;
         readonly string broadcastName;
 
         TcpListener listener;
         readonly List<TcpClient> clients = new();
 
-        public NetworkServer(int tcpPort, int udpPort, string broadcastName)
+        public NetworkServer(int tcpPort, string broadcastName)
         {
             this.tcpPort = tcpPort;
-            this.udpPort = udpPort;
             this.broadcastName = broadcastName;
         }
 
@@ -30,9 +28,7 @@ namespace Network
         {
             listener = new TcpListener(IPAddress.Any, tcpPort);
             listener.Start();
-
-            _ = BroadcastLoop();
-
+            
             while (true)
             {
                 var client = await listener.AcceptTcpClientAsync();
@@ -76,21 +72,6 @@ namespace Network
                 {
                     clients.Remove(c);
                 }
-            }
-        }
-
-        async Task BroadcastLoop()
-        {
-            Debug.Log("Broadcasting server...");
-            using var udp = new UdpClient { EnableBroadcast = true };
-            var endpoint = new IPEndPoint(IPAddress.Broadcast, udpPort);
-
-            while (true)
-            {
-                string msg = $"{broadcastName}|{tcpPort}";
-                byte[] data = Encoding.UTF8.GetBytes(msg);
-                udp.Send(data, data.Length, endpoint);
-                await Task.Delay(1000);
             }
         }
     }
