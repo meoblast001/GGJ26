@@ -5,11 +5,11 @@ namespace Data
     public class UnitData
     {
         public int id;
-        public int x;
-        public int y;
+        public float x;
+        public float y;
         public string state;
 
-        public UnitData(int id, int x, int y, string state)
+        public UnitData(int id, float x, float y, string state)
         {
             this.id = id;
             this.x = x;

@@ -25,7 +25,7 @@ namespace UI.Debug
             List<UnitData> units = new List<UnitData>();
             units.Add(new UnitData(1, Random.Range(0,10), Random.Range(0,10), "Idle"));
             units.Add(new UnitData(2, Random.Range(0,10), Random.Range(0,10), "Moving"));
-            SendUnitsUpdateCommand.Send(units);
+            BroadcastUnitsUpdateCommand.Send(units);
         }
         
         void OnDestroy()
@@ -35,8 +35,7 @@ namespace UI.Debug
         
         void HandleUnitCommandReceived(UnitCommandData data)
         {
-            ReceiveMessageText.text =
-                $"Command:\nUnit {data.unitId} → {data.targetUnitId}";
+            ReceiveMessageText.text = $"Command:\nUnit {data.unitId} → {data.targetUnitId}";
         }
     }
 }

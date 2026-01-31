@@ -3,7 +3,7 @@ using Data;
 using Newtonsoft.Json;
 namespace Network.Commands
 {
-    public static class SendUnitsUpdateCommand
+    public static class BroadcastUnitsUpdateCommand
     {
         public static void Send(List<UnitData> units)
         {
@@ -18,7 +18,7 @@ namespace Network.Commands
                 payload = JsonConvert.SerializeObject(data)
             };
 
-            NetworkManager.Instance.SendToAllClients(msg);
+            NetworkManager.Instance.NetworkServer.SendToAll(msg);
         }
     }
 }
