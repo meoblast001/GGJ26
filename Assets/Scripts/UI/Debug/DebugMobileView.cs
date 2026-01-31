@@ -15,7 +15,7 @@ namespace UI.Debug
         void Start()
         {
             SendCommandButton.onClick.AddListener(SendUnitCommand);
-            NetworkManager.Instance.OnUnitsUpdateDataReceived += HandleMessage;
+            NetworkManager.Instance.OnUnitsUpdateDataReceived += HandleUnitsUpdateReceived;
         }
         
         void SendUnitCommand()
@@ -25,10 +25,10 @@ namespace UI.Debug
         
         void OnDestroy()
         {
-            NetworkManager.Instance.OnUnitsUpdateDataReceived -= HandleMessage;
+            NetworkManager.Instance.OnUnitsUpdateDataReceived -= HandleUnitsUpdateReceived;
         }
         
-        void HandleMessage(UnitsUpdateData data)
+        void HandleUnitsUpdateReceived(UnitsUpdateData data)
         {
             string text = $"Units: {data.units.Count}\n";
             foreach (var u in data.units)
