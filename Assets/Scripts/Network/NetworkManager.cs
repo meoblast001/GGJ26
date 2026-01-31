@@ -40,6 +40,7 @@ namespace Network
         
         async Task StartServer()
         {
+            Debug.Log("Attempting to start server" + port);
             server = new TcpListener(IPAddress.Any, port);
             server.Start();
             Debug.Log("Server started on port " + port);
@@ -85,7 +86,7 @@ namespace Network
         async Task ConnectToServer()
         {
             client = new TcpClient();
-            Debug.Log("Attempting to server");
+            Debug.Log("Attempting to connect server");
             await client.ConnectAsync(serverIP, port);
             stream = client.GetStream();
             Debug.Log("Connected to server");
