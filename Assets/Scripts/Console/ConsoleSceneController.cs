@@ -1,9 +1,11 @@
+using Network;
 using UnityEngine;
 
 namespace Console
 {
     public class ConsoleSceneController : MonoBehaviour
     {
+        [SerializeField] NetworkManager networkManager;
         [SerializeField] GuardManager guardManager;
         [SerializeField] ExitDoorController exitDoorController;
 
