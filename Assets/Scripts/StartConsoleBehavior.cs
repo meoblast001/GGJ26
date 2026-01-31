@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class StartBehavior : MonoBehaviour
+public class StartConsoleBehavior : MonoBehaviour
 {
     void Start()
     {
