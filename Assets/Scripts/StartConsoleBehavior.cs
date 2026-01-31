@@ -9,8 +9,9 @@ public class StartConsoleBehavior : MonoBehaviour
     [SerializeField] private GameObject waitingForClientDisplay;
     [SerializeField] private string gameplaySceneName;
 
-    void Awake()
+    void Start()
     {
+        networkManager.Initialize();
         networkManager.NetworkServer.OnClientConnected += OnClientConnected;
     }
 

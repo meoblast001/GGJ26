@@ -295,7 +295,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30.35
+  m_fontSize: 91.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -394,6 +394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc9ead34457d3b78b1d6c43b76ea11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  networkManager: {fileID: 1765429735}
   waitingForClientDisplay: {fileID: 1342849605}
   gameplaySceneName: Scenes/GameplayConsole
 --- !u!1 &1694553699
@@ -506,7 +507,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Network.NetworkManager
   isServer: 1
   tcpPort: 5000
-  udpPort: 47777
 --- !u!4 &1765429736
 Transform:
   m_ObjectHideFlags: 0

@@ -17,6 +17,7 @@ public class StartMobileBehavior : MonoBehaviour
 
     void Start()
     {
+        networkManager.Initialize();
         connectButton.OnPress += OnConnectButtonPress;
     }
 

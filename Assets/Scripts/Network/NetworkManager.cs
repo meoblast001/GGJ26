@@ -33,7 +33,7 @@ namespace Network
             DontDestroyOnLoad(gameObject);
         }
 
-        void Start()
+        public void Initialize()
         {
             if (isServer)
             {
