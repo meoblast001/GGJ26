@@ -54,9 +54,14 @@ namespace Console
         private void DoSwitchGuard(GuardCharacterController newPlayerGuard, bool centerCameraImmediately = false)
         {
             if (playerCurrentGuard != null)
+            {
+                playerCurrentGuard.SetIsCurrentPlayer(false);
                 playerCurrentGuard.MovementDirection = Vector2.zero;
+            }
 
             playerCurrentGuard = newPlayerGuard;
+            playerCurrentGuard.SetIsCurrentPlayer(true);
+
             if (centerCameraImmediately)
                 mainCamera.transform.SetParent(playerCurrentGuard.transform, worldPositionStays: false);
             else

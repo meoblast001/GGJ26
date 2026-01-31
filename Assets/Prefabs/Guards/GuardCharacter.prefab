@@ -83,7 +83,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: -7809785511404226330, guid: 224ba6f738bb9a99fb95c2fc9d79c820, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -132,5 +132,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 517e1a586a83983e6ad92e1ac458dfff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardCharacterController
+  spriteRenderer: {fileID: 1420115032639466775}
   characterRigidbody: {fileID: 3397412113660476947}
   speed: 80
+  unmaskedSprite: {fileID: -7809785511404226330, guid: 224ba6f738bb9a99fb95c2fc9d79c820, type: 3}
+  maskedSprite: {fileID: 7517161418421729254, guid: 224ba6f738bb9a99fb95c2fc9d79c820, type: 3}
