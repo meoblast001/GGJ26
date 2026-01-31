@@ -1,28 +1,21 @@
-using System.Collections;
+using System.Net.Sockets;
+using Network;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class StartConsoleBehavior : MonoBehaviour
 {
+    [SerializeField] private NetworkManager networkManager;
     [SerializeField] private GameObject waitingForClientDisplay;
     [SerializeField] private string gameplaySceneName;
 
-    void Start()
+    void Awake()
     {
-        StartCoroutine(AwaitConnection());
+        networkManager.NetworkServer.OnClientConnected += OnClientConnected;
     }
 
-    private IEnumerator AwaitConnection()
+    private void OnClientConnected(TcpClient tcpClient)
     {
-        Debug.Log("Waiting for client to connect");
-        yield return new WaitForSeconds(3);
-        //Wait for client. Then..
-        OnClientConnected();
-    }
-
-    private void OnClientConnected()
-    {
-        Debug.Log("Client connected");
         waitingForClientDisplay.SetActive(false);
         SceneManager.LoadScene(gameplaySceneName, LoadSceneMode.Single);
     }
