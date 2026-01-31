@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Linq;
+using Extensions;
 using UnityEngine;
 
 namespace Console
@@ -13,6 +15,7 @@ namespace Console
         [Header("Configuration")]
         [SerializeField] private GuardCharacterController playerStartGuard;
         [SerializeField] private float guardSwitchMaxRadius;
+        [SerializeField] private float guardSwitchDurationSeconds;
 
         private GuardCharacterController[] guardCharacterControllers;
         private GuardCharacterController playerCurrentGuard;
@@ -24,7 +27,7 @@ namespace Console
             for (int i = 0; i < guardCharacterControllers.Length; ++i)
                 guardCharacterControllers[i].Id = i + 1;
 
-            DoSwitchGuard(playerStartGuard);
+            DoSwitchGuard(playerStartGuard, centerCameraImmediately: true);
 
             playerInputManager.OnSwitchGuard += OnSwitchGuard;
         }
@@ -48,10 +51,36 @@ namespace Console
                 DoSwitchGuard(closestGuard.guard);
         }
 
-        private void DoSwitchGuard(GuardCharacterController newPlayerGuard)
+        private void DoSwitchGuard(GuardCharacterController newPlayerGuard, bool centerCameraImmediately = false)
         {
+            if (playerCurrentGuard != null)
+                playerCurrentGuard.MovementDirection = Vector2.zero;
+
             playerCurrentGuard = newPlayerGuard;
-            mainCamera.transform.SetParent(playerCurrentGuard.transform, worldPositionStays: false);
+            if (centerCameraImmediately)
+                mainCamera.transform.SetParent(playerCurrentGuard.transform, worldPositionStays: false);
+            else
+            {
+                mainCamera.transform.SetParent(playerCurrentGuard.transform, worldPositionStays: true);
+                StartCoroutine(InterpolateCameraToOrigin(guardSwitchDurationSeconds));
+            }
+        }
+
+        private IEnumerator InterpolateCameraToOrigin(float duration)
+        {
+            var cameraTransform = mainCamera.transform;
+            var startLocalPosition = cameraTransform.localPosition;
+            var elapsedSeconds = 0f;
+
+            while (elapsedSeconds < duration)
+            {
+                elapsedSeconds += Time.deltaTime;
+                cameraTransform.SetLocalPosition2D(Vector2.Lerp(startLocalPosition, Vector2.zero,
+                    elapsedSeconds / duration));
+                yield return null;
+            }
+
+            cameraTransform.SetLocalPosition2D(Vector2.zero);
         }
     }
 }

@@ -297,6 +297,7 @@ MonoBehaviour:
   playerInputManager: {fileID: 606332688}
   playerStartGuard: {fileID: 419198761429478837}
   guardSwitchMaxRadius: 3
+  guardSwitchDurationSeconds: 0.5
 --- !u!1001 &419182420
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -520,7 +521,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 311842103748893892, guid: b9d968ce458f21ed0800f9bc220ee1d9, type: 3}
       propertyPath: m_Name
-      value: GuardCharacter 4
+      value: GuardCharacter4
       objectReference: {fileID: 0}
     - target: {fileID: 3814585804071112371, guid: b9d968ce458f21ed0800f9bc220ee1d9, type: 3}
       propertyPath: m_LocalPosition.x
