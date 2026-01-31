@@ -133,7 +133,7 @@
     },
     "com.unity.ext.nunit": {
       "version": "2.0.5",
-      "depth": 2,
+      "depth": 1,
       "source": "builtin",
       "dependencies": {}
     },
@@ -152,6 +152,15 @@
         "com.unity.2d.aseprite": "3.0.1",
         "com.unity.2d.tooling": "1.0.2"
       }
+    },
+    "com.unity.ide.rider": {
+      "version": "3.0.39",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.ext.nunit": "1.0.6"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
       "version": "2.0.26",
@@ -180,6 +189,13 @@
     "com.unity.nuget.mono-cecil": {
       "version": "1.11.6",
       "depth": 3,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.2",
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"

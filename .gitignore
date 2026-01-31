@@ -100,3 +100,7 @@ InitTestScene*.unity*
 
 # VS Code
 .vscode/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
