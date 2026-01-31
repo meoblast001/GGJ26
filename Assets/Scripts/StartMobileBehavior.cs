@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class StartMobileBehavior : MonoBehaviour
 {
-    [SerializeField] private NetworkManager networkManager;
+    [SerializeField] private NetworkController networkController;
     [SerializeField] private TMP_InputField hostInput;
     [SerializeField] private ConnectButton connectButton;
     [SerializeField] private string gameplaySceneName;
@@ -17,7 +17,7 @@ public class StartMobileBehavior : MonoBehaviour
 
     void Start()
     {
-        networkManager.Initialize();
+        networkController.Initialize();
         connectButton.OnPress += OnConnectButtonPress;
     }
 
@@ -26,8 +26,8 @@ public class StartMobileBehavior : MonoBehaviour
         Debug.Log("Trying to connect");
 
         var host = hostInput.text;
-        networkManager.NetworkClient.OnConnected += () => isConnected = true;
-        Task.Run(() => networkManager.NetworkClient.Connect(host, networkManager.tcpPort));
+        networkController.OnClientConnected += () => isConnected = true;
+        Task.Run(() => networkController.StartClient(host));
         AwaitConnectedToServer();
     }
 

@@ -18,7 +18,8 @@ namespace Network.Commands
                 payload = JsonConvert.SerializeObject(data)
             };
 
-            NetworkManager.Instance.NetworkServer.SendToAll(msg);
+            // todo:
+           // NetworkManager.Instance.NetworkServer.SendToAll(msg);
         }
     }
 }

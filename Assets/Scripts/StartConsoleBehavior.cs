@@ -5,17 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class StartConsoleBehavior : MonoBehaviour
 {
-    [SerializeField] private NetworkManager networkManager;
+    [SerializeField] private NetworkController networkController;
     [SerializeField] private GameObject waitingForClientDisplay;
     [SerializeField] private string gameplaySceneName;
 
     void Start()
     {
-        networkManager.Initialize();
-        networkManager.NetworkServer.OnClientConnected += OnClientConnected;
+        networkController.Initialize();
+        networkController.OnClientConnected += OnClientConnected;
     }
-
-    private void OnClientConnected(TcpClient tcpClient)
+    void OnClientConnected()
     {
         waitingForClientDisplay.SetActive(false);
         SceneManager.LoadScene(gameplaySceneName, LoadSceneMode.Single);

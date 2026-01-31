@@ -17,7 +17,7 @@ namespace UI.Debug
         {
             SendCommandButton.onClick.AddListener(SendUnitUpdate);
 
-            NetworkManager.Instance.OnUnitCommandDataReceived += HandleUnitCommandReceived;
+            NetworkController.Instance.OnUnitCommandDataReceived += HandleUnitCommandReceived;
         }
 
         void SendUnitUpdate()
@@ -30,7 +30,7 @@ namespace UI.Debug
         
         void OnDestroy()
         {
-            NetworkManager.Instance.OnUnitCommandDataReceived -= HandleUnitCommandReceived;
+            NetworkController.Instance.OnUnitCommandDataReceived -= HandleUnitCommandReceived;
         }
         
         void HandleUnitCommandReceived(UnitCommandData data)
