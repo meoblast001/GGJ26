@@ -37,6 +37,11 @@ namespace Console
             playerCurrentGuard.MovementDirection = playerInputManager.WalkVector;
         }
 
+        void OnDrawGizmosSelected()
+        {
+            Gizmos.DrawWireSphere(playerStartGuard.transform.position, guardSwitchMaxRadius);
+        }
+
         private void OnSwitchGuard()
         {
             var closestGuard = guardCharacterControllers.Where(guard => guard != playerCurrentGuard)
