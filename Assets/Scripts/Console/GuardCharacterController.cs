@@ -7,6 +7,7 @@ namespace Console
         [SerializeField] private Rigidbody2D characterRigidbody;
         [SerializeField] private float speed;
 
+        public int Id { get; set; }
         public Vector2 MovementDirection { get; set; }
 
         void FixedUpdate()
