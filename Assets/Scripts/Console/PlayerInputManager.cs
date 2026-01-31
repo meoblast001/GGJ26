@@ -22,6 +22,11 @@ namespace Console
             inputActions.Player.Enable();
         }
 
+        public void Disable()
+        {
+            inputActions.Player.Disable();
+        }
+
         private void OnWalkPerformed(InputAction.CallbackContext context)
         {
             Vector2 movement = context.ReadValue<Vector2>();
