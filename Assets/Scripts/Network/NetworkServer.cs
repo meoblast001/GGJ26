@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 namespace Network
 {
     public class NetworkServer
@@ -80,6 +81,7 @@ namespace Network
 
         async Task BroadcastLoop()
         {
+            Debug.Log("Broadcasting server...");
             using var udp = new UdpClient { EnableBroadcast = true };
             var endpoint = new IPEndPoint(IPAddress.Broadcast, udpPort);
 

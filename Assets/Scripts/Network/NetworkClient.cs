@@ -2,6 +2,7 @@ using System;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 namespace Network
 {
     public class NetworkClient
@@ -25,6 +26,7 @@ namespace Network
         {
             using var udp = new UdpClient(udpPort);
 
+            Debug.Log("Discovering server...");
             while (true)
             {
                 var result = await udp.ReceiveAsync();
