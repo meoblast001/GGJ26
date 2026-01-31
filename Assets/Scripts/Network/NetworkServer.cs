@@ -18,16 +18,17 @@ namespace Network
         TcpListener listener;
         readonly List<TcpClient> clients = new();
 
-        public NetworkServer(int tcpPort, string broadcastName)
+        public NetworkServer(int tcpPort)
         {
             this.tcpPort = tcpPort;
-            this.broadcastName = broadcastName;
         }
 
         public async Task Start()
         {
             listener = new TcpListener(IPAddress.Any, tcpPort);
             listener.Start();
+         
+            Debug.Log($"Server started on port {tcpPort}");
             
             while (true)
             {

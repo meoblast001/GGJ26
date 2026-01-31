@@ -47,7 +47,7 @@ namespace Network
 
         async void StartServer()
         {
-            server = new NetworkServer(tcpPort, "GGJ2026_UDP_BROADCAST");
+            server = new NetworkServer(tcpPort);
 
             server.OnMessageReceived += HandleMessage;
             server.OnClientConnected += _ => Debug.Log("Client connected");
