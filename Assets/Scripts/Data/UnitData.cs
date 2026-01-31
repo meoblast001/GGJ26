@@ -1,11 +1,20 @@
-﻿namespace Data
+﻿using System;
+namespace Data
 {
-    [System.Serializable]
+    [Serializable]
     public class UnitData
     {
         public int id;
-        public float x;
-        public float y;
+        public int x;
+        public int y;
         public string state;
+
+        public UnitData(int id, int x, int y, string state)
+        {
+            this.id = id;
+            this.x = x;
+            this.y = y;
+            this.state = state;
+        }
     }
 }

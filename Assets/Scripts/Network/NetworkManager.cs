@@ -1,124 +1,161 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 using Newtonsoft.Json;
-
+using UnityEngine;
 namespace Network
 {
     public class NetworkManager : MonoBehaviour
     {
+        public static NetworkManager Instance { get; private set; }
+        
         public bool isServer = true;
         public string serverIP = "127.0.0.1";
         public int port = 5000;
+
+        // --- Server fields ---
+        private TcpListener serverListener;
+        private List<TcpClient> connectedClients = new List<TcpClient>();
+
+        // --- Client fields ---
+        private TcpClient tcpClient;
+        private NetworkStream clientStream;
+
         public Action<INetworkMessage> OnMessageReceived;
 
-        TcpListener server;
-        TcpClient client;
-        NetworkStream stream;
-        
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+
         async void Start()
         {
-            try
-            {
-                if (isServer)
-                {
-                    await StartServer();
-                }
-                else
-                {
-                    await ConnectToServer();
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception();
-            }
+            if (isServer)
+                await StartServer();
+            else
+                await ConnectToServer();
         }
-        
+
+        #region Server
         async Task StartServer()
         {
-            Debug.Log("Attempting to start server" + port);
-            server = new TcpListener(IPAddress.Any, port);
-            server.Start();
+            serverListener = new TcpListener(IPAddress.Any, port);
+            serverListener.Start();
             Debug.Log("Server started on port " + port);
 
             while (true)
             {
-                var tcpClient = await server.AcceptTcpClientAsync();
-                Debug.Log("Client connected");
-                _ = HandleClient(tcpClient);
+                TcpClient newClient = await serverListener.AcceptTcpClientAsync();
+                Debug.Log("Client connected: " + newClient.Client.RemoteEndPoint);
+                connectedClients.Add(newClient);
+                _ = HandleClient(newClient);
             }
         }
-        
+
         async Task HandleClient(TcpClient tcpClient)
         {
-            var netStream = tcpClient.GetStream();
+            NetworkStream stream = tcpClient.GetStream();
             byte[] buffer = new byte[4096];
 
-            while (tcpClient.Connected)
+            try
             {
-                int bytesRead = 0;
+                while (tcpClient.Connected)
+                {
+                    int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                    if (bytesRead == 0) break; // client disconnected
+
+                    string json = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                    var msg = JsonConvert.DeserializeObject<INetworkMessage>(json);
+
+                    OnMessageReceived?.Invoke(msg);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("Client disconnected: " + e.Message);
+            }
+            finally
+            {
+                connectedClients.Remove(tcpClient);
+                tcpClient.Close();
+            }
+        }
+
+        public async void SendToAllClients(INetworkMessage message)
+        {
+            string json = JsonConvert.SerializeObject(message);
+            byte[] bytes = Encoding.UTF8.GetBytes(json);
+
+            for (int i = connectedClients.Count - 1; i >= 0; i--)
+            {
+                TcpClient client = connectedClients[i];
+                if (!client.Connected)
+                {
+                    connectedClients.RemoveAt(i);
+                    continue;
+                }
                 try
                 {
-                    bytesRead = await netStream.ReadAsync(buffer, 0, buffer.Length);
+                    await client.GetStream().WriteAsync(bytes, 0, bytes.Length);
                 }
                 catch
                 {
-                    break;
+                    connectedClients.RemoveAt(i);
                 }
-
-                if (bytesRead == 0)
-                {
-                    break;
-                }
-
-                string json = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                var msg = JsonConvert.DeserializeObject<INetworkMessage>(json);
-                OnMessageReceived?.Invoke(msg);
             }
-
-            tcpClient.Close();
         }
-        
+        #endregion
+
+        #region Client
         async Task ConnectToServer()
         {
-            client = new TcpClient();
-            Debug.Log("Attempting to connect server");
-            await client.ConnectAsync(serverIP, port);
-            stream = client.GetStream();
+            tcpClient = new TcpClient();
+            await tcpClient.ConnectAsync(serverIP, port);
+            clientStream = tcpClient.GetStream();
             Debug.Log("Connected to server");
 
             _ = ReceiveLoop();
         }
-        
-        public async void SendToServer(INetworkMessage message)
-        {
-            if (client.Connected)
-            {
-                string json = JsonConvert.SerializeObject(message);
-                byte[] bytes = Encoding.UTF8.GetBytes(json);
-                await stream.WriteAsync(bytes, 0, bytes.Length);
-            }
-        }
-        
+
         async Task ReceiveLoop()
         {
             byte[] buffer = new byte[4096];
-            while (client.Connected)
+            try
             {
-                int bytesRead = 0;
-                try { bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length); } 
-                catch { break; }
+                while (tcpClient.Connected)
+                {
+                    int bytesRead = await clientStream.ReadAsync(buffer, 0, buffer.Length);
+                    if (bytesRead == 0) break;
 
-                if (bytesRead == 0) break;
-
-                string json = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                var msg = JsonConvert.DeserializeObject<INetworkMessage>(json);
-                OnMessageReceived?.Invoke(msg);
+                    string json = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                    var msg = JsonConvert.DeserializeObject<INetworkMessage>(json);
+                    OnMessageReceived?.Invoke(msg);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("Disconnected from server: " + e.Message);
             }
         }
+
+        public async void SendToServer(INetworkMessage message)
+        {
+            if (tcpClient != null && tcpClient.Connected)
+            {
+                string json = JsonConvert.SerializeObject(message);
+                byte[] bytes = Encoding.UTF8.GetBytes(json);
+                await clientStream.WriteAsync(bytes, 0, bytes.Length);
+            }
+        }
+        #endregion
     }
 }
