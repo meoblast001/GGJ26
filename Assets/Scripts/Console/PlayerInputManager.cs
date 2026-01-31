@@ -9,7 +9,7 @@ namespace Console
         private ConsoleInputActions inputActions;
 
         public Vector2 WalkVector { get; private set; } = Vector2.zero;
-        public Action OnSwitchGuard;
+        public event Action OnSwitchGuard;
 
         void Awake()
         {

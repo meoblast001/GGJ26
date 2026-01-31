@@ -20,6 +20,8 @@ namespace Console
         private GuardCharacterController[] guardCharacterControllers;
         private GuardCharacterController playerCurrentGuard;
 
+        public int PlayerGuardId => playerCurrentGuard.Id;
+
         void Awake()
         {
             guardCharacterControllers = GetComponentsInChildren<GuardCharacterController>();
