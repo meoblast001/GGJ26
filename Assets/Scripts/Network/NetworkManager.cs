@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Data;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -17,7 +18,8 @@ namespace Network
         public string serverIP = "127.0.0.1";
         public int port = 5000;
 
-        public Action<NetMessage> OnMessageReceived;
+        public Action<UnitCommandData> OnUnitCommandDataReceived;
+        public Action<UnitsUpdateData> OnUnitsUpdateDataReceived;
 
         TcpListener server;
         List<TcpClient> connectedClients = new();
@@ -43,6 +45,25 @@ namespace Network
                 await StartServer();
             else
                 await StartClient();
+        }
+        
+        void HandleNetMessageReceived(NetMessage message)
+        {
+            switch (message.type)
+            {
+                case "SendUnitCommand":
+                {
+                    var data = JsonConvert.DeserializeObject<UnitCommandData>(message.payload);
+                    OnUnitCommandDataReceived?.Invoke(data);
+                    break;
+                }
+                case "UnitUpdate":
+                {
+                    var data = JsonConvert.DeserializeObject<UnitsUpdateData>(message.payload);
+                    OnUnitsUpdateDataReceived?.Invoke(data);
+                    break;
+                }
+            }
         }
 
         // ================= SERVER =================
@@ -73,7 +94,7 @@ namespace Network
                 {
                     NetMessage msg = await ReadMessage(stream);
                     Debug.Log($"[Server] Received: {msg.type} {msg.payload}");
-                    OnMessageReceived?.Invoke(msg);
+                    HandleNetMessageReceived(msg);
                 }
             }
             catch (Exception e)
@@ -132,7 +153,7 @@ namespace Network
                 {
                     NetMessage msg = await ReadMessage(clientStream);
                     Debug.Log($"[Client] Received: {msg.type} {msg.payload}");
-                    OnMessageReceived?.Invoke(msg);
+                    HandleNetMessageReceived(msg);
                 }
             }
             catch (Exception e)

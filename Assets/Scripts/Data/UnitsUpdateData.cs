@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace Data
 {
     [Serializable]
-    public class UnitUpdateData
+    public class UnitsUpdateData
     {
         public List<UnitData> units;
     }

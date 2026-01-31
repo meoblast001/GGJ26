@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Data;
 using Network;
 using Network.Commands;
-using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +17,7 @@ namespace UI.Debug
         {
             SendCommandButton.onClick.AddListener(SendUnitUpdate);
 
-            NetworkManager.Instance.OnMessageReceived += HandleMessage;
+            NetworkManager.Instance.OnUnitCommandDataReceived += HandleMessage;
         }
 
         void SendUnitUpdate()
@@ -26,27 +25,18 @@ namespace UI.Debug
             List<UnitData> units = new List<UnitData>();
             units.Add(new UnitData(1, Random.Range(0,10), Random.Range(0,10), "Idle"));
             units.Add(new UnitData(2, Random.Range(0,10), Random.Range(0,10), "Moving"));
-            SendUnitUpdateCommand.Send(units);
+            SendUnitsUpdateCommand.Send(units);
         }
         
         void OnDestroy()
         {
-            NetworkManager.Instance.OnMessageReceived -= HandleMessage;
+            NetworkManager.Instance.OnUnitCommandDataReceived -= HandleMessage;
         }
         
-        void HandleMessage(NetMessage message)
+        void HandleMessage(UnitCommandData data)
         {
-            switch (message.type)
-            {
-                case "SendUnitCommand":
-                {
-                    var data = JsonConvert.DeserializeObject<UnitCommandData>(message.payload);
-
-                    ReceiveMessageText.text =
-                        $"Command:\nUnit {data.unitId} → {data.targetUnitId}";
-                    break;
-                }
-            }
+            ReceiveMessageText.text =
+                $"Command:\nUnit {data.unitId} → {data.targetUnitId}";
         }
     }
 }

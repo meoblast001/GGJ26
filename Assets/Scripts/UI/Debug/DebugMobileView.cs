@@ -1,7 +1,6 @@
 using Data;
 using Network;
 using Network.Commands;
-using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +15,7 @@ namespace UI.Debug
         void Start()
         {
             SendCommandButton.onClick.AddListener(SendUnitCommand);
-            NetworkManager.Instance.OnMessageReceived += HandleMessage;
+            NetworkManager.Instance.OnUnitsUpdateDataReceived += HandleMessage;
         }
         
         void SendUnitCommand()
@@ -26,26 +25,17 @@ namespace UI.Debug
         
         void OnDestroy()
         {
-            NetworkManager.Instance.OnMessageReceived -= HandleMessage;
+            NetworkManager.Instance.OnUnitsUpdateDataReceived -= HandleMessage;
         }
         
-        void HandleMessage(NetMessage message)
+        void HandleMessage(UnitsUpdateData data)
         {
-            switch (message.type)
+            string text = $"Units: {data.units.Count}\n";
+            foreach (var u in data.units)
             {
-                case "UnitUpdate":
-                {
-                    var data = JsonConvert.DeserializeObject<UnitUpdateData>(message.payload);
-
-                    string text = $"Units: {data.units.Count}\n";
-                    foreach (var u in data.units)
-                    {
-                        text += $"{u.id} ({u.x},{u.y}) {u.state}\n";
-                    }
-                    ReceiveMessageText.text = text;
-                    break;
-                }
+                text += $"{u.id} ({u.x},{u.y}) {u.state}\n";
             }
+            ReceiveMessageText.text = text;
         }
     }
 }

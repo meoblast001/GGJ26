@@ -3,11 +3,11 @@ using Data;
 using Newtonsoft.Json;
 namespace Network.Commands
 {
-    public static class SendUnitUpdateCommand
+    public static class SendUnitsUpdateCommand
     {
         public static void Send(List<UnitData> units)
         {
-            var data = new UnitUpdateData
+            var data = new UnitsUpdateData
             {
                 units = units
             };
