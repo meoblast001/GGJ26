@@ -253,7 +253,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 891037025}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc202e026b246b04ab8977dc204127fe, type: 3}
+  m_Script: {fileID: 11500000, guid: 88fbb1fb356147c1b91050991faa08b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Network.NetworkManager
   isServer: 0
@@ -437,6 +437,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1370868096}
     m_Modifications:
+    - target: {fileID: 1432572884186133903, guid: d71ee58ee86a785479d3d32a86cfc3e3, type: 3}
+      propertyPath: m_fontSize
+      value: 45.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1432572884186133903, guid: d71ee58ee86a785479d3d32a86cfc3e3, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 1432572884186133903, guid: d71ee58ee86a785479d3d32a86cfc3e3, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2914908870249807860, guid: d71ee58ee86a785479d3d32a86cfc3e3, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

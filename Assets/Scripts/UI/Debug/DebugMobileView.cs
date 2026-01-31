@@ -1,5 +1,6 @@
+using Data;
 using Network;
-using Network.Messages;
+using Network.Commands;
 using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
@@ -14,35 +15,36 @@ namespace UI.Debug
     
         void Start()
         {
-            SendCommandButton.onClick.AddListener(SendDebugMessage);
+            SendCommandButton.onClick.AddListener(SendUnitCommand);
             NetworkManager.Instance.OnMessageReceived += HandleMessage;
         }
-
-        void SendDebugMessage()
+        
+        void SendUnitCommand()
         {
-            NetworkManager.Instance.SendToServer(new SendUnitCommandMessage(Random.Range(0,10), Random.Range(0,10)));
+            SendUnitCommandCommand.Send(Random.Range(0,10), Random.Range(0,10));
         }
         
-        void HandleMessage(INetworkMessage message)
+        void OnDestroy()
         {
-            switch (message.Type)
+            NetworkManager.Instance.OnMessageReceived -= HandleMessage;
+        }
+        
+        void HandleMessage(NetMessage message)
+        {
+            switch (message.type)
             {
                 case "UnitUpdate":
-                    var payload = JsonConvert.DeserializeObject<UnitUpdateMessage>(message.Payload);
+                {
+                    var data = JsonConvert.DeserializeObject<UnitUpdateData>(message.payload);
 
-                    string displayText = $"Received Unit Update ({payload.units.Count} units):\n";
-                    foreach (var unit in payload.units)
+                    string text = $"Units: {data.units.Count}\n";
+                    foreach (var u in data.units)
                     {
-                        displayText += $"ID: {unit.id} | Pos: ({unit.x:F1}, {unit.y:F1}) | State: {unit.state}\n";
+                        text += $"{u.id} ({u.x},{u.y}) {u.state}\n";
                     }
-
-                    ReceiveMessageText.text = displayText;
-
+                    ReceiveMessageText.text = text;
                     break;
-                
-                default:
-                    ReceiveMessageText.text = $"Unknown message type: {message.Type}\nPayload: {message.Payload}";
-                    break;
+                }
             }
         }
     }
