@@ -28,7 +28,7 @@ public class StartMobileBehavior : MonoBehaviour
         var host = hostInput.text;
         networkManager.NetworkClient.OnConnected += () => isConnected = true;
         Task.Run(() => networkManager.NetworkClient.Connect(host, networkManager.tcpPort));
-        AwaitConnectedToServer();
+        StartCoroutine(AwaitConnectedToServer());
     }
 
     private IEnumerator AwaitConnectedToServer()
