@@ -32,8 +32,6 @@ namespace Console
             {
                 var guardCharacterController = guardCharacterControllers[i];
                 guardCharacterController.Id = i + 1;
-                foreach (var waypoint in guardCharacterController.PathWaypoints)
-                    waypoint.SetParent(WaypointPool, worldPositionStays: true);
             }
 
             Debug.Log("Switching to first guard");
