@@ -12,6 +12,7 @@ namespace Console
         [Header("Managers")]
         [SerializeField] private PlayerInputManager playerInputManager;
         [SerializeField] private Transform WaypointPool;
+        [SerializeField] private PlayerHealth playerHealth;
 
         [Header("Configuration")]
         [SerializeField] private GuardCharacterController playerStartGuard;
@@ -74,6 +75,8 @@ namespace Console
 
             playerCurrentGuard = newPlayerGuard;
             playerCurrentGuard.SetIsCurrentPlayer(true);
+
+            playerHealth.RefillHealth();
 
             if (centerCameraImmediately)
                 mainCamera.transform.SetParent(playerCurrentGuard.transform, worldPositionStays: false);

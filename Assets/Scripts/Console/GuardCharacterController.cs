@@ -74,7 +74,6 @@ namespace Console
                     var waypoint = pathWaypoints[currentWaypointTargetIdx];
                     var currentVectorToWaypoint = (waypoint.position - transform.position).normalized;
                     // Indicates that the guard has reached or passed the waypoint.
-                    Debug.Log($"ID = {Id}, dot = {Vector3.Dot(currentVectorToWaypoint, initialVectorToWaypoint.Value)}, v1={currentVectorToWaypoint}, v2={initialVectorToWaypoint.Value}");
                     if (Vector3.Dot(currentVectorToWaypoint, initialVectorToWaypoint.Value) <= 0)
                         currentWaypointTargetIdx = (currentWaypointTargetIdx + 1) % pathWaypoints.Length;
                     // Waypoint does not change, so return.
@@ -84,14 +83,12 @@ namespace Console
 
                 var nextWaypoint = pathWaypoints[currentWaypointTargetIdx];
                 initialVectorToWaypoint = (nextWaypoint.position - transform.position).normalized;
-                Debug.Log($"Calculated initial waypoint vector: id = {Id}, vector = {initialVectorToWaypoint}");
                 MovementDirection = new Vector2(initialVectorToWaypoint.Value.x, initialVectorToWaypoint.Value.y);
             }
         }
 
         private void EndWaypointFollowing()
         {
-            Debug.Log($"End waypoint following on {Id}");
             initialVectorToWaypoint = null;
         }
     }
