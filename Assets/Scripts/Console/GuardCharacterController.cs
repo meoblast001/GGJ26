@@ -13,9 +13,6 @@ namespace Console
         [SerializeField] private Sprite unmaskedSprite;
         [SerializeField] private Sprite maskedSprite;
 
-        [Header("Pathing")]
-        [SerializeField] private Transform[] pathWaypoints;
-
         public int Id { get; set; }
         public Vector2 MovementDirection { get; set; }
         public Transform[] PathWaypoints => pathWaypoints;
@@ -31,9 +28,15 @@ namespace Console
         }
 
         private bool isCurrentPlayer  = false;
+        private Transform[] pathWaypoints;
         private int currentWaypointTargetIdx = 0;
         private Vector3? initialVectorToWaypoint = null;
         private GuardCharacterController targetCharacter = null;
+
+        void Awake()
+        {
+            pathWaypoints = GetComponentsInChildren<GuardWaypoint>().Select(waypoint => waypoint.transform).ToArray();
+        }
 
         void FixedUpdate()
         {
@@ -44,12 +47,13 @@ namespace Console
 
         void OnDrawGizmosSelected()
         {
-            if (pathWaypoints.Length == 0)
+            var waypoints = GetComponentsInChildren<GuardWaypoint>().Select(waypoint => waypoint.transform).ToArray();
+            if (waypoints.Length == 0)
                 return;
             Gizmos.color = Color.blue;
-            var pathLineStrip = pathWaypoints.Where(transform => transform != null)
+            var pathLineStrip = waypoints.Where(transform => transform != null)
                 .Select(transform => transform.position)
-                .Append(pathWaypoints.First().transform.position)
+                .Append(waypoints.First().transform.position)
                 .ToArray();
             Gizmos.DrawLineStrip(pathLineStrip, false);
         }
@@ -75,7 +79,13 @@ namespace Console
                     var currentVectorToWaypoint = (waypoint.position - transform.position).normalized;
                     // Indicates that the guard has reached or passed the waypoint.
                     if (Vector3.Dot(currentVectorToWaypoint, initialVectorToWaypoint.Value) <= 0)
+                    {
+                        if (Id == 3)
+                        {
+                            Debug.Log($"Switching to {(currentWaypointTargetIdx + 1) % pathWaypoints.Length}");
+                        }
                         currentWaypointTargetIdx = (currentWaypointTargetIdx + 1) % pathWaypoints.Length;
+                    }
                     // Waypoint does not change, so return.
                     else
                         return;

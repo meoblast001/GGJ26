@@ -41,6 +41,16 @@ namespace Console
             playerInputManager.OnSwitchGuard += OnSwitchGuard;
         }
 
+        void Start()
+        {
+            foreach (var guardCharacterController in guardCharacterControllers)
+            {
+                Debug.Log($"Guard {guardCharacterController.Id} has waypoints: {guardCharacterController.PathWaypoints.Length}");
+                foreach (var waypoint in guardCharacterController.PathWaypoints)
+                    waypoint.SetParent(WaypointPool, worldPositionStays: true);
+            }
+        }
+
         void Update()
         {
             playerCurrentGuard.MovementDirection = playerInputManager.WalkVector;
