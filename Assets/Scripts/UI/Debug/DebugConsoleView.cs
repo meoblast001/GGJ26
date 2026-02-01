@@ -35,7 +35,7 @@ namespace UI.Debug
         
         void HandleUnitCommandReceived(UnitCommandData data)
         {
-            ReceiveMessageText.text = $"Command:\nUnit {data.unitId} → {data.targetUnitId}";
+            ReceiveMessageText.text = $"Command:\nUnit {data.unitId}";
         }
     }
 }

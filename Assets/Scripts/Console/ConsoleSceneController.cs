@@ -5,7 +5,6 @@ namespace Console
 {
     public class ConsoleSceneController : MonoBehaviour
     {
-        [SerializeField] NetworkController networkManager;
         [SerializeField] GuardManager guardManager;
         [SerializeField] ExitDoorController exitDoorController;
 

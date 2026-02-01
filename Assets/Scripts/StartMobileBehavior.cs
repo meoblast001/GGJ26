@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class StartMobileBehavior : MonoBehaviour
 {
-    [SerializeField] private NetworkController networkController;
+    private NetworkController networkController;
     [SerializeField] private TMP_InputField hostInput;
     [SerializeField] private ConnectButton connectButton;
     [SerializeField] private string gameplaySceneName;
@@ -17,6 +17,7 @@ public class StartMobileBehavior : MonoBehaviour
 
     void Start()
     {
+        networkController = NetworkController.Instance;
         networkController.Initialize();
         connectButton.OnPress += OnConnectButtonPress;
     }

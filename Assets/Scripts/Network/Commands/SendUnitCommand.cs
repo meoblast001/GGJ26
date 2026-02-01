@@ -1,25 +1,25 @@
-﻿using Data;
+using Data;
 using Newtonsoft.Json;
+using Unity.Collections;
+using Unity.Netcode;
+using UnityEngine;
 namespace Network.Commands
 {
     public static class SendUnitCommand
     {
-        public static void Send(int unitId, int targetUnitId)
+        public static void Send(int unitId)
         {
             var data = new UnitCommandData
             {
                 unitId = unitId,
-                targetUnitId = targetUnitId
             };
+            
+            using var writer = new FastBufferWriter(128, Allocator.Temp);
+            writer.WriteValueSafe(JsonConvert.SerializeObject(data));
 
-            var msg = new NetMessage
-            {
-                type = "SendUnitCommand",
-                payload = JsonConvert.SerializeObject(data)
-            };
-
-            // todo:
-            //NetworkController.Instance.NetworkClient.Send(msg);
+            Debug.Log($"Sending SendUnitCommand: {JsonConvert.SerializeObject(data)}");
+            NetworkController.Instance.networkManager.CustomMessagingManager
+                .SendNamedMessage("SendUnitCommand", NetworkManager.ServerClientId, writer);
         }
     }
 }

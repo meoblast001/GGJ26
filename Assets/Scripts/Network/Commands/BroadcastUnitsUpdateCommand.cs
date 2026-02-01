@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using Data;
 using Newtonsoft.Json;
+using Unity.Collections;
+using Unity.Netcode;
+using UnityEngine;
 namespace Network.Commands
 {
     public static class BroadcastUnitsUpdateCommand
@@ -11,15 +14,12 @@ namespace Network.Commands
             {
                 units = units
             };
+            
+            using var writer = new FastBufferWriter(128, Allocator.Temp);
+            writer.WriteValueSafe(JsonConvert.SerializeObject(data));
 
-            var msg = new NetMessage
-            {
-                type = "UnitUpdate",
-                payload = JsonConvert.SerializeObject(data)
-            };
-
-            // todo:
-           // NetworkManager.Instance.NetworkServer.SendToAll(msg);
+            Debug.Log($"Sending BroadcastUnitsUpdateCommand: {JsonConvert.SerializeObject(data)}");
+            NetworkController.Instance.networkManager.CustomMessagingManager.SendNamedMessageToAll("BroadcastUnitsUpdateCommand", writer);
         }
     }
 }

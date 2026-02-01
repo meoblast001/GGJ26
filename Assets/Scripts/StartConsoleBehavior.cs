@@ -1,16 +1,15 @@
-using System.Net.Sockets;
 using Network;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class StartConsoleBehavior : MonoBehaviour
 {
-    [SerializeField] private NetworkController networkController;
     [SerializeField] private GameObject waitingForClientDisplay;
     [SerializeField] private string gameplaySceneName;
 
     void Start()
     {
+        NetworkController networkController = NetworkController.Instance;
         networkController.Initialize();
         networkController.OnClientConnected += OnClientConnected;
     }

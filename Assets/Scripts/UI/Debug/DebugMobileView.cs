@@ -20,7 +20,7 @@ namespace UI.Debug
         
         void SendUnitCommand()
         {
-            Network.Commands.SendUnitCommand.Send(Random.Range(0,10), Random.Range(0,10));
+            Network.Commands.SendUnitCommand.Send(Random.Range(0,10));
         }
         
         void OnDestroy()
