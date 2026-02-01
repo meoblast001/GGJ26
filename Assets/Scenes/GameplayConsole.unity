@@ -267,6 +267,7 @@ MonoBehaviour:
   winText: {fileID: 1003000156}
   loseText: {fileID: 729564358}
   healthSlider: {fileID: 2134330541}
+  gameOverNextScene: Scenes/GameplayConsole
 --- !u!114 &192400503
 MonoBehaviour:
   m_ObjectHideFlags: 0

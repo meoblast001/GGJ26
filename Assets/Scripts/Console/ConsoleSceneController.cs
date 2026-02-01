@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Console
@@ -14,6 +15,9 @@ namespace Console
         [SerializeField] TMP_Text winText;
         [SerializeField] TMP_Text loseText;
         [SerializeField] Slider healthSlider;
+
+        [Header("Scenes")]
+        [SerializeField] private string gameOverNextScene;
 
         private bool gameOver = false;
 
@@ -49,7 +53,7 @@ namespace Console
             gameOverText.gameObject.SetActive(true);
             playerInputManager.Disable();
             yield return new WaitForSeconds(5);
-            Application.Quit();
+            SceneManager.LoadScene(gameOverNextScene, LoadSceneMode.Single);
         }
     }
 }
