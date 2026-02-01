@@ -135,7 +135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GuardCharacterController
   spriteRenderer: {fileID: 1420115032639466775}
   characterRigidbody: {fileID: 3397412113660476947}
-  speed: 120
+  speed: 150
   unmaskedSprite: {fileID: -7809785511404226330, guid: 224ba6f738bb9a99fb95c2fc9d79c820, type: 3}
   maskedSprite: {fileID: 7517161418421729254, guid: 224ba6f738bb9a99fb95c2fc9d79c820, type: 3}
 --- !u!70 &5437123473630093651

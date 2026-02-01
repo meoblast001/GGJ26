@@ -36,6 +36,7 @@ namespace Console
                     waypoint.SetParent(WaypointPool, worldPositionStays: true);
             }
 
+            Debug.Log("Switching to first guard");
             DoSwitchGuard(playerStartGuard, centerCameraImmediately: true);
 
             playerInputManager.OnSwitchGuard += OnSwitchGuard;
