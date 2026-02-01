@@ -34,7 +34,6 @@ namespace Console
                 guardCharacterController.Id = i + 1;
             }
 
-            Debug.Log("Switching to first guard");
             DoSwitchGuard(playerStartGuard, centerCameraImmediately: true);
 
             playerInputManager.OnSwitchGuard += OnSwitchGuard;
@@ -44,7 +43,6 @@ namespace Console
         {
             foreach (var guardCharacterController in guardCharacterControllers)
             {
-                Debug.Log($"Guard {guardCharacterController.Id} has waypoints: {guardCharacterController.PathWaypoints.Length}");
                 foreach (var waypoint in guardCharacterController.PathWaypoints)
                     waypoint.SetParent(WaypointPool, worldPositionStays: true);
             }
