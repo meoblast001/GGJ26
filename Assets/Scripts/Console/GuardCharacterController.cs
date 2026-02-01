@@ -79,13 +79,7 @@ namespace Console
                     var currentVectorToWaypoint = (waypoint.position - transform.position).normalized;
                     // Indicates that the guard has reached or passed the waypoint.
                     if (Vector3.Dot(currentVectorToWaypoint, initialVectorToWaypoint.Value) <= 0)
-                    {
-                        if (Id == 3)
-                        {
-                            Debug.Log($"Switching to {(currentWaypointTargetIdx + 1) % pathWaypoints.Length}");
-                        }
                         currentWaypointTargetIdx = (currentWaypointTargetIdx + 1) % pathWaypoints.Length;
-                    }
                     // Waypoint does not change, so return.
                     else
                         return;
