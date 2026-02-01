@@ -11,6 +11,8 @@ namespace Console
 
         [Header("Managers")]
         [SerializeField] private PlayerInputManager playerInputManager;
+        [SerializeField] private Transform WaypointPool;
+        [SerializeField] private PlayerHealth playerHealth;
 
         [Header("Configuration")]
         [SerializeField] private GuardCharacterController playerStartGuard;
@@ -27,7 +29,12 @@ namespace Console
             guardCharacterControllers = GetComponentsInChildren<GuardCharacterController>();
 
             for (int i = 0; i < guardCharacterControllers.Length; ++i)
-                guardCharacterControllers[i].Id = i + 1;
+            {
+                var guardCharacterController = guardCharacterControllers[i];
+                guardCharacterController.Id = i + 1;
+                foreach (var waypoint in guardCharacterController.PathWaypoints)
+                    waypoint.SetParent(WaypointPool, worldPositionStays: true);
+            }
 
             DoSwitchGuard(playerStartGuard, centerCameraImmediately: true);
 
@@ -68,6 +75,8 @@ namespace Console
 
             playerCurrentGuard = newPlayerGuard;
             playerCurrentGuard.SetIsCurrentPlayer(true);
+
+            playerHealth.RefillHealth();
 
             if (centerCameraImmediately)
                 mainCamera.transform.SetParent(playerCurrentGuard.transform, worldPositionStays: false);
